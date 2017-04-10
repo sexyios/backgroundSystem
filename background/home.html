@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>首页</title>
+  <link rel="stylesheet" href="http://statics-1251329614.file.myqcloud.com/css/bui.css">
+  <link rel="stylesheet" href="http://statics-1251329614.file.myqcloud.com/css/dpl.css">
+  <script type="text/javascript" src="http://statics-1251329614.file.myqcloud.com/js/jquery-min.js"></script>
+  <script type="text/javascript" src="http://statics-1251329614.file.myqcloud.com/js/bui-min.js"></script>
+  <script type="text/javascript" src="http://haiqiancun.com/file/demo/custom.modernizr.js"></script>
+  <script type="text/javascript" src="http://statics-1251329614.file.myqcloud.com/js/juicer-min.js"></script>
+  <style>
+  body{min-width: 990px;font-family: 微软雅黑 !important;position:static!important;}
+  img{border:0;}.bui-message .bui-stdmod-body{padding: 0 30px 5px 0;}
+  #grid{padding:10px 0px;width:100%;min-width: 900px;}
+  .image-pbar .bui-pb-page, .bui-grid .bui-pagingbar .bui-pb-page{width:56px;}
+  select.input-normal{margin-left: 10px;}
+  #userIdcardNum{width:150px;}.bui-dialog a.bui-ext-close{top:15px;}
+  .num,.time{font-family: "微软雅黑" !important;border-radius: 3px;outline: none;border: 1px solid #ccc;padding: 4px 0 4px 5px;}
+  .num{width:50px !important;line-height: 15px;}.fr{float: right;padding: 0 10px 10px 0;}
+  .time{width:130px;}.tl{text-align: left;padding-left: 10px;}
+  .rows .control-label{width:80px;}
+  .well{padding: 15px 20px;}.fl{float: left;}.ml100{margin-left:127px;}.ml100 .control-label{text-align: left;width: 120px;}
+  input[type="text"], input[type="password"], input[type="email"]{width:112px;}
+  #edit-from input[type="text"]{width:143px;}.clear{clear: both;content:"";}.w200{width:100%;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  #mattingImage,#sampleImage{width:100px;height:100px;display: block;border:none;}
+  .h100{height:100px;}.span24 .fl .control-label{width:80px;}.gray{color:#aaa;}
+  .control-group {
+    margin-left: -10px;
+    margin-top: -5px;
+  }
+  .form-actions  {margin-top: -5px;}
+
+  .center{
+  	text-align: center;
+  }
+  .bold{
+  	font-weight: bold;
+  }
+  .czwh{
+  	overflow: hidden;
+  }
+  .ov{
+  	overflow: hidden;
+  }
+  a{
+  	cursor: pointer;
+  }
+  .fg{
+  	padding: 0 10px;
+  	color: #ccc;
+  }
+  .search>div{
+  	float: right;
+  	overflow: hidden;
+  }
+
+  /* 浮层样式 start*/
+  .popBox{
+  	overflow: hidden;
+  	height: 150px;
+  	overflow-y: auto;
+  }
+  .popBox .must{
+  	color: red;
+  }
+  .popBox h2{
+  	text-align: center;
+  }
+  .panel-row {
+    font-size: 12px;
+    margin-bottom: 10px;
+    color: #666;
+	}
+	.row-left{
+		width: 21%;
+		vertical-align: top;
+    line-height: 32px;
+    display: inline-block;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+	}
+	.row-right{
+		width: 60%;
+		vertical-align: top;
+    line-height: 32px;
+    display: inline-block;
+    word-wrap: break-word;
+	}
+	.popBox input{
+		width: 300px;
+	}
+  .diandian{
+    /*overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    display: inline-block;*/
+  }
+  /* 浮层样式 end */
+  .bui-message{
+  	z-index: 9999;
+  }
+  .bui-grid-sort-icon{
+  	display: none!important;
+  }
+ /* .bui-grid-body{
+    min-width: 1045px!important;
+  }
+  .bui-grid-header{
+    min-width: 1045px!important;
+  }*/
+  .form-horizontal>div{
+    float: right;
+  }
+  .bui-message{
+    min-width: 160px!important;
+  }
+  </style>
+</head>
+<body>
+  <div class="breadcrumb">
+    <ul class="breadcrumb">
+      <li class="active">首页</li>
+    </ul>
+    <div class="czwh">
+    	<div class="form-horizontal well ov">
+	    	<div>
+	    		<button class="button button-primary J_add">添加</button>
+	    	</div>
+	    </div>
+	    <div id="grid"></div>
+    </div>
+  </div>
+
+
+ 	<!-- 场景 新增，编辑模板 -->
+ 	<script type="text/juicer" id="pop">
+ 		  <div class="popBox">
+        <form class="popForm">
+          <!-- <h2>场景编辑</h2> -->
+          <ul>
+            <li class="panel-row">
+              <div class="row-left">
+                <span class="must">*</span>
+                账号：
+              </div>
+              <div class="row-right">
+                <input maxlength="64" {@if type}readonly{@/if} name="businessCode" value='${businessCode}' type="text" class="input-large bm" />
+              </div>
+            </li>
+            <li class="panel-row">
+              <div class="row-left">
+                <span class="must">*</span>
+                对比值：
+              </div>
+              <div class="row-right">
+                <input maxlength="32" name="threshold" value='${threshold}' data-message="对比值输入有误" placeholder="请输入0 - 100的数,小数支持两位" type="text" class="input-large zzs" />
+              </div>
+            </li>
+            <li class="panel-row">
+              <div class="row-left">
+                <span class="must">*</span>
+                活体值：
+              </div>
+              <div class="row-right">
+                <input maxlength="32" name="livenessThreshold" value='${livenessThreshold}' data-message="活体值输入有误" placeholder="请输入0 - 1的数,小数支持两位" type="text" class="input-large zzs" />
+              </div>
+            </li>
+          </ul>
+        </form>
+		  </div>
+ 	</script>
+
+ 	<!-- 场景 详情 -->
+ 	<script type="text/juicer" id="popDetail">
+ 			<div class="popBox">
+		  	<!-- <h2>场景编辑</h2> -->
+		  	<ul>
+		  		<li class="panel-row">
+		  			<div class="row-left">
+		  				账号：
+		  			</div>
+		  			<div class="row-right">
+		  				<span>${businessCode}</span>
+		  			</div>
+		  		</li>
+		  		<li class="panel-row">
+		  			<div class="row-left">
+		  				对比值：
+		  			</div>
+		  			<div class="row-right">
+		  				<span>${threshold}</span>
+		  			</div>
+		  		</li>
+		  		<li class="panel-row">
+		  			<div class="row-left">
+		  				活体值：
+		  			</div>
+		  			<div class="row-right">
+		  				<span>${livenessThreshold}</span>
+		  			</div>
+		  		</li>
+		  	</ul>
+		  </div>
+ 	</script>
+
+  <script type="text/javascript">
+  //全局的ajax访问，处理ajax清求时sesion超时
+	 $.ajaxSetup({
+       contentType:"application/x-www-form-urlencoded;charset=utf-8",
+       complete:function(XMLHttpRequest,textStatus){
+           //通过XMLHttpRequest取得响应头，sessionstatus，
+           var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");
+           if(sessionstatus=="timeout"){
+               //如果超时就处理 ，指定要跳转的页面
+               var pvalue = new Date().getTime();
+                 var pname = 'rdm'+pvalue;
+                 var randomParam = '?'+pname+'='+pvalue;
+               BUI.Message.Alert("账号已超时，请重新登录！",function(){
+                top.location.href = "/login.htm"+randomParam;
+               },"info");
+           }
+       }
+   });
+
+	 BUI.use(['bui/grid','bui/data',"bui/overlay"],function(Grid,Data,Overlay){
+	 	// 表格数据 -- start
+
+ 	 	var Grid = Grid;
+ 	 	var Store = Data.Store;
+    var Format=Grid.Format;
+ 	 	var columns = [
+      {title : '用户名',dataIndex :'businessCode', width:"33%",renderer:function(value,row,index){
+      	var value = value || "";
+      	return (
+      		'<span class="diandian" title="'+value+'">'+value+'</span>'
+    		)
+      }},
+      {title : '时间',dataIndex : 'gmtCreate',width:"33%",renderer:function(value){
+        var arr = Format.datetimeRenderer(value).split(" ");
+        return (
+          '<span>'+arr[0]+'</span>' +
+          '<br />' +
+          '<span>'+arr[1]+'</span>'
+        )
+      }},
+      {title : '操作',width:"15%",renderer:function(value,row,index){
+      	return (
+      		'<a class="J_edit">编辑</a>' +
+      		'<span class="fg">|</span>' +
+      		'<a class="J_detail">详情</a>' +
+      		'<span class="fg">|</span>' +
+      		'<a class="J_delete">删除</a>'
+    		);
+      }},
+    ];
+    var store = new Store({
+      url : '/abc.json',
+      //data : [{a:'123'},{a:'cdd',b:'edd'},{a:'1333',c:'eee',d:2}],
+      autoLoad:true,
+      /*remoteSort: true,*/
+      proxy : {
+        ajaxOptions : {
+          traditional : true,
+          type : 'post'
+        }
+      },
+      root :'paging.rows',
+      totalProperty : 'paging.results',
+      autoLoad:true, //自动加载数据
+      params : { //配置初始请求的参数
+        'pageIndex' : '0',
+        'start':0,
+        'limit':10,
+      },
+      pageSize:10	// 配置分页数目
+    });
+    var grid = new Grid.Grid({
+      render:'#grid',
+      columns : columns,
+      loadMask: true,
+      store: store,
+      width: "100%",
+      emptyDataTpl : '<div class="centered" style="padding:30px 0;"><h2>查询的数据不存在</h2></div>',
+      bbar:{
+          pagingBar:true
+      }
+    });
+    grid.render();
+    grid.on('cellclick',function(ev){
+      var record = ev.record, //点击行的记录
+        field = ev.field, //点击对应列的dataIndex
+        target = $(ev.domTarget); //点击的元素
+      // 去除空数据
+      var newRecord = {};
+      for (var key in record){
+        (record[key] !== null) && (newRecord[key] = record[key] );
+      }
+      //console.log(newRecord);
+      if(target.hasClass('J_edit')){
+        newRecord.type = "edit";
+      	cjwh.showPop("edit",newRecord);
+      }
+
+      if(target.hasClass('J_detail')){
+        cjwh.showPopDetail(newRecord);
+      }
+
+      if(target.hasClass('J_delete')){
+        new Overlay.Dialog({
+          title:'确认',
+          width:300,
+          height:120,
+          bodyContent:'<p>确定删除此场景吗?</p>',
+          closeAction : 'destroy',
+          success : function(){
+            var _this = this;
+            $.ajax({
+              url : "/delete",
+              type : "post",
+              data : {
+                businessCode : record.businessCode,
+              },
+              success : function(data){
+                if(data.success){
+                  BUI.Message.Alert('删除成功','success');
+                  store.load({
+                    'start':0,
+                    'limit':10,
+                  });
+                  _this.close();
+                }else{
+                  BUI.Message.Alert(data.errorMsg,'error');
+                }
+              },
+            });
+          },
+        }).show();
+      }
+    });
+
+	 	// 表格数据 -- end
+	 	var cjwh = {
+	 		init : function(){
+	 			this.bindEvent();
+	 		},
+	 		// 弹出框 详情
+	 		showPopDetail : function(data){
+	 			var html = juicer($("#popDetail").html(),data);
+	 			new Overlay.Dialog({
+          title:"详情",
+          width:500,
+          mask:true,
+          closeAction : 'destroy',
+          buttons:[
+            {
+              text:'关闭',
+              elCls : 'button',
+              handler : function(){
+                this.close();
+              }
+            }
+          ],
+          bodyContent: html,
+        }).show();
+	 		},
+	 		// 弹出框 新增，修改 (title - 浮层标题 ， data 浮层数据)
+	 		showPop : function(type,data){
+	 			// 校验数据
+	 			var verify = function(){
+	 				if(!$(".bm").val().trim()){
+	 					BUI.Message.Alert('请输入账号','error');
+	 					return;
+	 				}else if((!(/(?!^0\.0?0$)^[0-9][0-9]?(\.[0-9]{1,2})?$|^100$/.test($("[name='threshold']").val().trim() ) ) ) ){
+            BUI.Message.Alert('对比值输入有误','error');
+            return;
+          }else if((!(/^[01]$|^0.\d{1,2}/.test($("[name='livenessThreshold']").val().trim() ) ) ) ){
+            BUI.Message.Alert('活体值输入有误','error');
+            return;
+          }
+	 				return true;
+	 			}
+	 			// 浮层 title
+	 			var title = null;
+        // 提交url
+        var url = null;
+        // 提示语
+        var msg = null;
+	 			if(type === "add"){
+	 				title = "新增";
+          url = "/add.json";
+          msg = "新增成功";
+	 			}else{
+	 				title = "编辑";
+          url = "/edit.json";
+          msg = "修改成功";
+	 			}
+	 			var html = juicer($("#pop").html(),data);
+	 			var a = new Overlay.Dialog({
+          title:title,
+          width:500,
+          mask:true,
+          closeAction : 'destroy',
+          buttons:[
+            {
+              text:'确定',
+              elCls : 'button button-primary',
+              handler : function(){
+                var self = this;
+                // 校验数据
+                if(verify()){
+                  $(".popForm input").each(function(k,v){
+                    $(v).val($(v).val().trim());
+                  });
+                	$.ajax({
+                    url : url,
+                    type : "post",
+                    data : $(".popForm").serialize(),
+                    success : function(data){
+                      if(data.success){
+                        BUI.Message.Alert(msg,'success');
+                        store.load({
+                          'start':0,
+                          'limit':10,
+                        });
+                      }else{
+                        BUI.Message.Alert(data.errorMsg,'error');
+                      }
+                    }
+                  });
+                	this.close();
+                }
+              }
+            },{
+              text:'关闭',
+              elCls : 'button',
+              handler : function(){
+                this.close();
+              }
+            }
+          ],
+          bodyContent: html,
+        });
+        a.show();
+	 		},
+	 		bindEvent : function(){
+	 			var body = $("body");
+	 			var _this = this;
+	 			body.on("click",".J_add",function(e){
+	 				_this.showPop("add",{});
+	 			});
+	 		},
+	 	};
+	 	cjwh.init();
+	 });
+
+    </script>
+</body>
+</html>

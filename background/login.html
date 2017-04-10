@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <title>登录</title>
+  <link rel="stylesheet" href="http://statics-1251329614.file.myqcloud.com/css/bui.css">
+  <link rel="stylesheet" href="http://statics-1251329614.file.myqcloud.com/css/dpl.css">
+  <script type="text/javascript" src="http://statics-1251329614.file.myqcloud.com/js/jquery-min.js"></script>
+  <script type="text/javascript" src="http://statics-1251329614.file.myqcloud.com/js/bui-min.js"></script>
+  <style>
+  body{ min-width:1180px;padding-top: 12%;min-height: 100vh;box-sizing: border-box;background: url('http://statics-1251329614.file.myqcloud.com/img/bg.png') no-repeat;background-size:cover;}
+  .logo{width:500px;height:90px;margin: 10px auto;vertical-align: middle;text-align: center;}.logo img{max-height: 100%;vertical-align: middle;}
+  .title{font-size: 30px;margin-top: 26px;font-family: microsoft yahei;color: #001555;vertical-align: middle;}
+  .edit{box-sizing: border-box;background-color: white;padding:20px 40px 10px 40px;width:400px;margin:0 auto;}
+  .edit>*{margin:10px 0;}
+  input[type="text"], input[type="password"], textarea, select{padding: 4px 0 4px 12px;margin:10px 0;}
+  .input-large{margin:5px 0;}
+  .tc{text-align: center;}.tr{text-align: right;}
+  .tl{text-align: left;color:red;float: left;}
+  </style>
+</head>
+<body>
+    <div class="logo">
+      <img src="" alt="" /> <span class="title">后台管理系统</span>
+    </div>
+      <div class="edit tc">
+        <h2>用户登录</h2>
+        <input type="text" id="J-username" class="input-large bui-form-field" placeholder="用户名"/>
+        <input type="password" id="J-password" onkeydown="if(event.keyCode == 13){$('#J-submit').click();}" class="input-large bui-form-field" placeholder="密码"/>
+        <div class="tl"></div>
+        <div class="tr">
+          <input type="button" id="J-submit" class="button button-primary" style="width:70px;" value="登录">
+        </div>
+      </div>
+    <script>
+      $(document).ready(function(){
+        if (window != top) {
+          top.location.href = location.href;
+        }
+        $("#J-submit").on('click',function(){
+          var pvalue = new Date().getTime();
+          var pname = 'rdm'+pvalue;
+          var randomParam = '?'+pname+'='+pvalue;
+          var username = $("#J-username").val();
+          var password = $("#J-password").val();
+          if(username == ""){
+              $(".tl").html("用户名不能为空");
+          }else if(password == ""){
+              $(".tl").html("密码不能为空");
+          }else{
+            $(".tl").html("");
+            $.ajax({
+              url:'',
+              type:"POST",
+              data:{
+                'loginName':username,
+                'loginPassword':password
+              },
+              success:function(result){
+                if(result.result == "true"){
+                  window.location.href="/layout.htm"+randomParam;
+                }else{
+                  $(".tl").html(result.message);
+                }
+              },
+              error:function(data){
+
+              }
+            });
+          }
+        });
+      });
+    </script>
+</body>
+</html>

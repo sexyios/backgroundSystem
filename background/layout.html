@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <title>后台模板</title>
+  <link rel="stylesheet" href="http://g.tbcdn.cn/fi/bui/css/layout-min.css">
+  <link rel="stylesheet" href="http://g.alicdn.com/bui/bui/1.1.21/css/bs3/bui.css">
+  <link rel="stylesheet" href="http://g.alicdn.com/bui/bui/1.1.21/css/bs3/dpl.css">
+  <script type="text/javascript" src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
+  <script type="text/javascript" src="http://statics-1251329614.file.myqcloud.com/js/bui-min.js"></script>
+  <style>
+    .header{
+      width: 100%;
+      height:80px;
+      background: #000;
+    }
+    .quit{
+      cursor: pointer;
+    }
+    body{
+      overflow-x: hidden;
+      font-family: "微软雅黑";
+    }
+    /********重写BUI框架样式***************/
+      .ext-border-layout {
+          background: #282828;
+      }
+      .ext-border-layout .x-border-north, .ext-border-layout .x-border-east, .ext-border-layout .x-border-west, .ext-border-layout .x-border-south, .ext-border-layout .x-border-center {
+          border: 1px solid #282828;
+      }
+      .tab-nav-bar{
+          display: none;
+      }
+      .ext-border-layout .x-collapsed-btn{
+          display:none;
+      }
+      .ext-border-layout .x-border-title{
+          background:#fff;
+          color:#000;
+          border-bottom: 2px solid #ccc;
+      }
+      .x-border-title.x-border-title-west {
+          text-align: center;
+          background: #32323a;
+          color: #fff;
+          font-size: 18px;
+          font-weight: 600;
+          padding: 18px 0;
+          border-bottom: 2px solid rgba(0,0,0,.25);
+      }
+      /*******header样式******/
+      .header{
+          width:100%;
+          text-align:right;
+          padding:13px 0;
+      }
+      .x-caret-down{
+          position:relative;
+          top:-3px;
+          left:3px;
+      }
+      .back-platform{
+          padding:15px 15px;
+          border-right:1px solid #ccc;
+      }
+      .back-platform:hover{
+          text-decoration: none;
+      }
+      .back-platform .iconfont2{
+          margin-right: 3px;
+      }
+      .notice{
+          padding:15px 25px;
+          border-right:1px solid #ccc;
+          color:#000;
+      }
+      .staff{
+          position:relative;
+          padding:15px 15px;
+          border-right:1px solid #ccc;
+      }
+      .staff-toggle-content{
+          position:absolute;
+          top:0;
+          left:0;
+          width:140px;
+          border:1px solid #ccc;
+          display:none;
+      }
+      .staff-toggle-item{
+
+      }
+      .exit{
+          padding:15px 15px;
+      }
+      /********重写BUItree样式*****************/
+      .bui-tree-item{
+          background: #484852;
+          height:54px;
+          line-height: 54px;
+          color: #828e9a;
+          font-size: 16px;
+          cursor: pointer;
+          border-bottom: 1px solid #333;
+          overflow: visible;
+      }
+      .bui-tree-item span{
+        margin-left: 15px;
+      }
+      .bui-tree-list{
+          border: none;
+          background-color: #282828;
+      }
+      .bui-side-menu{
+          padding:0px;
+      }
+      .bui-tree-item:hover{
+          border-left:3px solid #0ae;
+          color:#fff;
+      }
+      .bui-tree-item.bui-tree-item-selected{
+          border-left:3px solid #0ae;
+          color:#fff;
+      }
+      /*****自定义muen样式*****/
+      .firTit{
+          background:#32323a;
+          color:rgba(255,255,255,.8);
+          position: relative;
+      }
+      .firTit span{
+        margin-left: 10px;
+      }
+      .firTit:hover{
+          background:#0ac;
+          color:#fff;
+      }
+      .firIcon{
+          display: inline-block;
+          padding-right:9px;
+          color:#ccc;
+      }
+      .secTit{
+          padding-left:45px;
+      }
+      .expendIconBox{
+          padding-right:15px;
+          position: absolute;
+          right:0;
+      }
+      .expendIcon,.unExpendIcon{
+          color:#ccc;
+      }
+      .unExpendIcon{
+          display: none;
+          font-weight: bold;
+      }
+      .bui-tree-item-expanded .expendIcon{
+          display: none;
+      }
+      .bui-tree-item-expanded .unExpendIcon{
+          display: inline-block;
+      }
+      .title{
+        font-size: 18px;
+        line-height: 50px;
+      }
+      .title .fl{
+        padding: 0 10px;
+        color: white;
+        float: left;
+        width: 252px;
+        box-sizing: border-box;
+        background: #282828;
+      }
+      .title .fr{
+        font-size: 14px;
+        padding: 0 30px;
+        float: right;
+      }
+  </style>
+</head>
+<body>
+<div id="J_Layout">
+    <script type="text/javascript">
+    //全局的ajax访问，处理ajax清求时sesion超时
+				 $.ajaxSetup({
+				     contentType:"application/x-www-form-urlencoded;charset=utf-8",
+				     complete:function(XMLHttpRequest,textStatus){
+				         //通过XMLHttpRequest取得响应头，sessionstatus，
+				         var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus");
+				         if(sessionstatus=="timeout"){
+				             //如果超时就处理 ，指定要跳转的页面
+				             var pvalue = new Date().getTime();
+			                 var pname = 'rdm'+pvalue;
+			                 var randomParam = '?'+pname+'='+pvalue;
+				             BUI.Message.Alert("账号已超时，请重新登录！",function(){
+				             	top.location.href = "/login.htm"+randomParam;
+				             },"info");
+				         }
+				     }
+				 });
+    BUI.use(['bui/layout', 'bui/tab', 'bui/data', 'bui/tree'], function(Layout,Tab,Data,Tree) {
+        var home = {
+            init: function(){
+                this.initPage();
+                this.quit();
+
+            },
+            quit:function(){
+              $(".title").on('click','.quit',function(){
+                /*$.ajax({
+                  url:'',
+                  type:"post",
+                  success:function(data){
+                      var pvalue = new Date().getTime();
+		              var pname = 'rdm'+pvalue;
+		              var randomParam = '?'+pname+'='+pvalue;
+                      // window.location.href="/login.htm"+randomParam;
+                  },
+                  error:function(){
+
+                  }
+                })*/
+                window.location.href="login.html";
+              });
+            },
+            initPage: function(){
+              var that = this;
+              var pvalue = new Date().getTime();
+              var pname = 'rdm'+pvalue;
+              var randomParam = '?'+pname+'='+pvalue;
+              var nodes = [
+                  {
+                      text: '<div class="firTit"><span>first</span><span class="expendIconBox"><i class="icon iconfont icon-youjiantou expendIcon"></i><i class="icon iconfont icon-arrowll-copy unExpendIcon"></i></span></div>',
+                      id: '1',
+                      expanded: true,
+                      href: 'test.html',
+                      children: [
+                          {
+                              text: '<span>1.1</span>',
+                              id: '11',
+                              cls:'bui-tree-item-selected',
+                              href: 'test.html',
+                          },
+                          {
+                              text: '<span>1.2</span>',
+                              id: '13',
+                              href: 'home.html',
+                          },
+                          {
+                              text: '<span>1.3</span>',
+                              id: '15',
+                              href: 'test.html',
+                          },
+                          {
+                              text: '<span>1.4</span>',
+                              id: '15',
+                              href: 'main/test2.html',
+                          }
+                      ]
+                  },
+                  {
+                      text: '<div class="firTit"><span>second</span><span class="expendIconBox"><i class="icon iconfont icon-youjiantou expendIcon"></i><i class="iconfont icon icon-arrowll-copy unExpendIcon"></i></span></div>',
+                      id: '2',
+                      expanded: false,
+                      href: 'main/test2.html',
+                      children: [
+                            {
+                               text: '<span>2.1</span>',
+                               id: '23',
+                               href: 'main/test2.html',
+                            }
+                       ],
+                  }
+              ];
+              var control = new Layout.Viewport({
+                  width: 600,
+                  height: 500,
+                  elCls: 'ext-border-layout',
+                  children: [
+                        {
+                          layout : {
+                            region : 'north',
+                            height : 50
+                          },
+                          xclass : 'controller',
+                          content : '<div class="title"><div class="fl"><img src="" alt="" /> 后台管理系统</div><div class="fr"> admin | <span class="quit">退出</span></div></div>'
+                        },
+                      {
+                          layout: {
+                              region: 'west',
+                              fit: 'both',
+                              collapsable: true,
+                              width: 250
+                          },
+                          xclass: 'tree-list',
+                          id: 'menu-tree',
+                          expandAnimate : true,
+                          elCls : 'bui-side-menu',
+                          showIcons : false,
+                          accordion : true, //设置手风琴效果
+                          expandEvent : 'itemclick', //单击展开节点
+                          id : 'menuTree',
+                          collapseEvent : 'itemclick',  //点击收缩效果去除，展开的icon依然生效
+                          nodes: nodes
+                      },{
+                          xclass : 'nav-tab', //Grid
+                          layout : {
+                              region : 'center',
+                              fit : 'both'
+                          },
+                          id : 'tab'
+                      }
+                  ],
+                  plugins: [Layout.Border]
+              });
+              control.render();
+              var tab = control.getChild('tab'),//通过id获取
+              tree = control.getChild('menuTree',true);  //级联查找树节点
+              //自动打开欢迎页
+              tab.addTab({
+                  title : "首页",
+                  href : "test.html",
+                  id : "428"
+              });
+              $(".bui-tree-list ul li:nth-child(2)").trigger('click');
+              tree.on('itemclick',function (ev) {
+                  var node = ev.item,
+                          id = node.id,
+                          text = node.text,
+                          href = node.href+randomParam;
+                          var item = tab.getActivedItem();
+                          item.reload();
+                  if(href){
+                      tab.addTab({
+                          title : text,
+                          href : href,
+                          id : id
+                      });
+                  }
+                  if(tree.isExpanded(node)){
+                    // item.parent("bui-tree-item").removeClass("bui-tree-item-selected").nextSbiling("bui-tree-item").addClass("bui-tree-item-selected");
+                  }
+              });
+
+            }
+        };
+        home.init();
+    });
+    </script>
+</div>
+</body>
+</html>
